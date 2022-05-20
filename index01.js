@@ -242,6 +242,7 @@ function createNoteEl(note) {
     select.style.display = 'none'
     pin.style.display = 'none'
     unpin.style.display = 'block'
+    to_trash.style.display = 'none'
     notesList = document.querySelector("#pinned_notes_list")
   }
 
