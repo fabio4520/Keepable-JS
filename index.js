@@ -53,18 +53,22 @@ function createNote(note) {
   localStorage.setItem("notes", JSON.stringify(notes))
 }
 
-function PermanentDeleteNote(note){
+function permanentDeleteNote(note){
   const index = notes.indexOf(note)
   notes.splice(index,1)
   localStorage.setItem("notes", JSON.stringify(notes))
 }
 
-function MoveNote(note){
+function moveNote(note){
   const index = notes.indexOf(note)
   note.trash = !note.trash
   notes[index] = note
   console.log(note)
   localStorage.setItem("notes", JSON.stringify(notes))
+}
+
+function editNote(note){
+  // TO DO
 }
 
 const form = document.querySelector("form")
@@ -110,6 +114,8 @@ function createNoteEl(note) {
   title.textContent = note.title
   const body = document.createElement("p")
   body.textContent = note.body
+  const edit = document.createElement("button")
+  edit.textContent = "Edit note"
   const to_trash = document.createElement("button")
   to_trash.textContent = "Move to trash"
   const to_active = document.createElement("button")
@@ -127,6 +133,7 @@ function createNoteEl(note) {
   div.append(title)
   div.append(body)
   div.append(select)
+  div.append(edit)
   div.append(to_trash)
   div.append(to_active)
   div.append(erase)
@@ -144,23 +151,28 @@ function createNoteEl(note) {
   } 
   notesList.prepend(div)
 
+  edit.addEventListener("click", (event) => {
+    editNote(note);
+    // renderNotes(notes,true);
+  });
+
   to_trash.addEventListener("click", (event) => {
     event.preventDefault();
-    MoveNote(note);
+    moveNote(note);
     toggle_trash_view()
     // renderNotes(notes,true);
   });
 
   to_active.addEventListener("click", (event) => {
     event.preventDefault();
-    MoveNote(note);
+    moveNote(note);
     toggle_notes_view()
     // renderNotes(notes,note.trash);
   });
 
   erase.addEventListener("click", (event) => {
     event.preventDefault();
-    PermanentDeleteNote(note);
+    permanentDeleteNote(note);
     renderNotes(notes,true);
   });
 
