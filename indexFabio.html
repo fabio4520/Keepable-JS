@@ -11,8 +11,8 @@
 
 <body>
   <header class="grid align-center header">
-    <span class="title ml-30 white">Keep</span>
-    <span class="white">Welcome to {keepable}</span>
+    <span class="title ml-30">Keep</span>
+    <span>Welcome to {keepable}</span>
   </header>
 
   <main class="grid border-top">
@@ -28,7 +28,7 @@
       </button>
     </div>
     
-    <div id="notes" class="flex-column border-left p30">
+    <div id="notes" class="border-left p30">
       <form id="form" class="flex-column">
         <label for="title" class="fit-content"></label>
         <input type="text" id="title" name="title" placeholder="The title for my new note">
@@ -53,21 +53,11 @@
         </div>
       </form>
 
-      <p class="white">PINNED</p>
-      <div id="pinned_notes_list" class="grid-notes-list">
+      <div id="notes_list" class="grid-notes-list">
       </div>
-      
-      <p class="mt-8 white">OTHERS</p>
-      <div id="active_notes_list" class="grid-notes-list mt-8">
-      </div>
-
-      <!-- <div id="notes_list" class="grid-notes-list">
-      </div> -->
 
     </div>
-    <div id="trash">
-      <div id="trash_notes_list" class="grid-notes-list border-left p30">
-      </div>
+    <div id="trashes_list" class="grid-notes-list border-left p30">
     </div>
     
 
