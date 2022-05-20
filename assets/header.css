@@ -16,10 +16,14 @@
 }
 body{
   background-color: rgb(29, 33, 40);
-  color: white;
+  /* color: white; */
 }
 
 /* Utils starts*/
+.white
+{
+  color: white;
+}
 .header
 {
   height: 70px;
@@ -55,6 +59,10 @@ body{
 .fit-content
 {
   max-width: fit-content;
+}
+.absolute
+{
+  position: absolute;
 }
 /* padding */
 .p3
@@ -166,7 +174,7 @@ input, textarea
 {
   background-color: #b7beca;
 }
-.trash_button
+.trash_button, .pin_button
 {
   /* background: none; */
 	color: inherit;

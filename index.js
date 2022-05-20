@@ -72,7 +72,7 @@ function moveNote(note){
 function unpinNote(note){
   const index = notes.indexOf(note)
   note.pin = false
-  note.color = '#FFFFFF'
+  // note.color = '#000000'
   notes[index] = note
   localStorage.setItem("notes", JSON.stringify(notes))
   toggle_notes_view()
@@ -81,7 +81,7 @@ function unpinNote(note){
 function pinNote(note){
   const index = notes.indexOf(note)
   note.pin = true
-  note.color = '#000000'
+  // note.color = '#000000'
   notes[index] = note
   localStorage.setItem("notes", JSON.stringify(notes))
   toggle_notes_view()
@@ -91,27 +91,30 @@ function editNote(note){
   // TO DO
   const edit_div = document.createElement('div');
   edit_div.innerHTML = 
-  `<form id="edit_form_${note.id}">
-    <label for="title">Title:</label><br>
-    <input type="text" id="title" name="title" value="${note.title}"><br>
-    <label for="body">Body:</label><br>
-    <textarea type="date" id="body" name="body">${note.body}</textarea><br>
-    <label for="color">Color:</label><br>
-    <select name="color">
-      <option value="#FFFFFF">Blank</option>
-      <option value="#F28B82">Salmon</option>
-      <option value="#FBBC04">Orange</option>
-      <option value="#FFF475">Yellow</option>
-      <option value="#CCFF90">Green</option>
-      <option value="#A7FFEB">Emerald</option>
-      <option value="#CBF0F8">Skyblue</option>
-      <option value="#AECBFA">Steel</option>
-      <option value="#D7AEFB">Purple</option>
-      <option value="#FDCFE8">Pink</option>
-    </select>
-    <input type="submit" value="Update!">
-    <button>Cancel</button>
-  </form>`
+  `<form id="form" class="flex-column absolute">
+    <label for="title" class="fit-content"></label>
+    <input type="text" id="title" name="title" value="${note.title}" placeholder="The title for my new note">
+    <label for="body"></label>
+    <textarea type="date" id="body" name="body" placeholder="This is the body for the note.">${note.body}</textarea>
+
+    <div class="flex-between">
+      <!-- <label for="color"></label> -->
+      <select name="color" id="color" class="fit-content">
+        <option value="#FFFFFF">Blank</option>
+        <option value="#F28B82">Salmon</option>
+        <option value="#FBBC04">Orange</option>
+        <option value="#FFF475">Yellow</option>
+        <option value="#CCFF90">Green</option>
+        <option value="#A7FFEB">Emerald</option>
+        <option value="#CBF0F8">Skyblue</option>
+        <option value="#AECBFA">Steel</option>
+        <option value="#D7AEFB">Purple</option>
+        <option value="#FDCFE8">Pink</option>
+      </select>
+      <input type="submit" value="Keep it!" class="fit-content submit">
+    </div>
+  </form>
+  `
   let note_div = document.querySelector(`#note_${note.id}`)
   let select = edit_div.querySelectorAll("select")
   note_div.append(edit_div)
@@ -190,9 +193,23 @@ function createNoteEl(note) {
   const body = document.createElement("p")
   body.textContent = note.body
   const pin = document.createElement("button")
-  pin.textContent = "Pin note"
+  // <i class="fa fa-thumb-tack" aria-hidden="true"></i>
+  // Icon pin
+  const icon_pin = document.createElement("i")
+  icon_pin.classList.add("fa", "fa-thumb-tack")
+  icon_pin.setAttribute("aria-hidden", "true")
+  pin.classList.add("pin_button") // delete styles for button
+  pin.append(icon_pin)
+  // Icon ends
+  
   const unpin = document.createElement("button")
-  unpin.textContent = "Unpin note"
+  const unpin_icon = document.createElement("i")
+  unpin_icon.classList.add("fa", "fa-thumb-tack")
+  unpin_icon.setAttribute("aria-hidden", "true")
+  unpin.classList.add("pin_button") // delete styles for button
+  unpin.append(unpin_icon)
+  
+
   const edit = document.createElement("button")
   edit.textContent = "Edit note"
   const to_trash = document.createElement("button")
@@ -201,9 +218,9 @@ function createNoteEl(note) {
   const icon_trash = document.createElement("i")
   icon_trash.classList.add("fa", "fa-trash")
   icon_trash.setAttribute("aria-hidden", "true")
+  to_trash.classList.add("trash_button") // delete styles for button
   to_trash.append(icon_trash)
   // Icon ends
-  to_trash.classList.add("trash_button") // delete styles for button
   // to_trash.textContent = "Move to trash"
   const to_active = document.createElement("button")
   to_active.textContent = "Restore"
@@ -322,9 +339,6 @@ function renderNotes(notes,trash_status=true) {
       createNoteEl(note)
   });
   }
-  // else {
-  //   notesList.textContent = "Empty"
-  // }
   
   let notes_view = document.querySelector("#notes")
   notes_list = document.querySelector("#active_notes_list")
@@ -338,23 +352,6 @@ function renderNotes(notes,trash_status=true) {
   if (notes_list.children.length === 0 ) {
     notes_view.append(message);
   }
-  // pinnedNotesList = document.querySelector("#pinned_notes_list");
-  // pinned_sel = document.querySelector("#pinned")
-  // other_sel = document.querySelector("#others")
-  // if (!pinned_sel) {
-  //   const pinned = document.createElement("p");
-  //   pinned.textContent = "PINNED";
-  //   pinned.id = "pinned";
-  //   pinnedNotesList.parentNode.insertBefore(pinned, pinnedNotesList);
-  // };
-  // notesList = document.querySelector("#active_notes_list");
-  // if (!other_sel) {
-  //   const note = document.createElement("p");
-  //   note.textContent = "OTHERS";
-  //   note.classList.add("mt-8");
-  //   note.id = "others"
-  //   notesList.parentNode.insertBefore(note, notesList);
-  // };
   
 }
 renderNotes(notes)
