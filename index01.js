@@ -27,6 +27,7 @@ const initialNotes = [
     id: 0,
     trash: false,
     creation_date: new Date(),
+    pin: false,
     title: "Shopping",
     body: "Nintendo",
     color: "#F28B82"
@@ -35,6 +36,7 @@ const initialNotes = [
     id: 1,
     trash: true,
     creation_date: new Date(),
+    pin: false,
     title: "Edutacion",
     body: "Codeable",
     color: "#CCFF90"
@@ -67,8 +69,80 @@ function moveNote(note){
   localStorage.setItem("notes", JSON.stringify(notes))
 }
 
+function unpinNote(note){
+  const index = notes.indexOf(note)
+  note.pin = false
+  note.color = '#FFFFFF'
+  notes[index] = note
+  console.log(note)
+  localStorage.setItem("notes", JSON.stringify(notes))
+  toggle_notes_view()
+}
+
+function pinNote(note){
+  const index = notes.indexOf(note)
+  note.pin = true
+  note.color = '#000000'
+  notes[index] = note
+  console.log(note)
+  localStorage.setItem("notes", JSON.stringify(notes))
+  toggle_notes_view()
+}
+
 function editNote(note){
   // TO DO
+  const edit_div = document.createElement('div');
+  edit_div.innerHTML = 
+  `<form id="edit_form_${note.id}">
+    <label for="title">Title:</label><br>
+    <input type="text" id="title" name="title" value="${note.title}"><br>
+    <label for="body">Body:</label><br>
+    <textarea type="date" id="body" name="body">${note.body}</textarea><br>
+    <label for="color">Color:</label><br>
+    <select name="color">
+      <option value="#FFFFFF">Blank</option>
+      <option value="#F28B82">Salmon</option>
+      <option value="#FBBC04">Orange</option>
+      <option value="#FFF475">Yellow</option>
+      <option value="#CCFF90">Green</option>
+      <option value="#A7FFEB">Emerald</option>
+      <option value="#CBF0F8">Skyblue</option>
+      <option value="#AECBFA">Steel</option>
+      <option value="#D7AEFB">Purple</option>
+      <option value="#FDCFE8">Pink</option>
+    </select>
+    <input type="submit" value="Update!">
+    <button>Cancel</button>
+  </form>`
+  let note_div = document.querySelector(`#note_${note.id}`)
+  let select = edit_div.querySelectorAll("select")
+  note_div.append(edit_div)
+  const edit_form = document.querySelector(`#edit_form_${note.id}`)
+  cancel_button=edit_form.querySelector("button")
+  cancel_button.addEventListener("click", (event) => {
+    edit_div.remove()
+  })
+  edit_form.addEventListener("submit", (event) => {
+    editNoteDetail(event,note)
+    toggle_notes_view()
+  })
+}
+
+function editNoteDetail(event,note) {
+  event.preventDefault()
+  const {title, body, color} = event.target.elements
+  const updatedNote = {
+    id: note.id,
+    trash: note.trash,
+    creation_date: note.creation_date,
+    pin: note.pin,
+    title: title.value,
+    body: body.value,
+    color: color.value
+  }
+  const index = notes.indexOf(note)
+  notes[index] = updatedNote
+  localStorage.setItem("notes", JSON.stringify(notes))
 }
 
 const form = document.querySelector("form")
@@ -85,6 +159,7 @@ form.addEventListener("submit", (event) => {
     id: last_id + 1,
     trash: false,
     creation_date: new Date(),
+    pin: false,
     title: title.value,
     body: body.value,
     color: color.value
@@ -108,12 +183,16 @@ function createNoteEl(note) {
 }
   
   const div = document.createElement("div")
-  div.setAttribute("id", note.id)
+  div.setAttribute("id", `note_${note.id}`)
   div.style.backgroundColor = note.color
   const title = document.createElement("h3")
   title.textContent = note.title
   const body = document.createElement("p")
   body.textContent = note.body
+  const pin = document.createElement("button")
+  pin.textContent = "Pin note"
+  const unpin = document.createElement("button")
+  unpin.textContent = "Unpin note"
   const edit = document.createElement("button")
   edit.textContent = "Edit note"
   const to_trash = document.createElement("button")
@@ -133,23 +212,49 @@ function createNoteEl(note) {
   div.append(title)
   div.append(body)
   div.append(select)
+  div.append(pin)
+  div.append(unpin)
   div.append(edit)
   div.append(to_trash)
   div.append(to_active)
   div.append(erase)
 
   let notesList = document.querySelector("#active_notes_list")
+  edit.style.display = 'block'
+  pin.style.display = 'block'
+  unpin.style.display = 'none'
   to_trash.style.display = 'block'
   to_active.style.display = 'none'
   erase.style.display = 'none'
 
   if (note.trash==true) {
     notesList = document.querySelector("#trash_notes_list")
+    edit.style.display = 'none'
+    pin.style.display = 'none'
+    unpin.style.display = 'none'
     to_trash.style.display = 'none'
     to_active.style.display = 'block'
     erase.style.display = 'block'
   } 
+
+  if (note.pin == true) {
+    div.style.color = "white"
+    select.style.display = 'none'
+    pin.style.display = 'none'
+    unpin.style.display = 'block'
+    to_trash.style.display = 'none'
+    notesList = document.querySelector("#pinned_notes_list")
+  }
+
   notesList.prepend(div)
+
+  unpin.addEventListener("click", (event) => {
+    unpinNote(note);
+  });
+
+  pin.addEventListener("click", (event) => {
+    pinNote(note);
+  });
 
   edit.addEventListener("click", (event) => {
     editNote(note);
@@ -177,14 +282,17 @@ function createNoteEl(note) {
   });
 
   select.addEventListener("change", (event) => {
-    editNote(event,note);
+    editColorNote(event,note);
   });
   select.value = note.color
   // return div
 }
 
-function editNote(event,note) {
+function editColorNote(event,note) {
+  const index = notes.indexOf(note)
   note.color = event.target.value
+  notes[index] = note
+  localStorage.setItem("notes", JSON.stringify(notes))
   renderNotes(notes,note.trash)
 }
 
