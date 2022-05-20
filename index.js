@@ -42,7 +42,7 @@ function toggle_trash_view() {
   let notes_view = document.querySelector("#notes")
   let trash_view = document.querySelector("#trashes_list")
   notes_view.style.display = 'none'
-  trash_view.style.display = 'block'
+  trash_view.style.display = 'grid'
   renderTrashes(trashes);
 }
 
@@ -127,6 +127,10 @@ form.addEventListener("submit", (event) => {
   }
   createNote(newNote)
   createNoteEl(newNote)
+  title.value = "";
+  body.value = "";
+  color.value = "";
+
 })
 
 function createNoteEl(note) {
@@ -139,7 +143,13 @@ function createNoteEl(note) {
   const body = document.createElement("p")
   body.textContent = note.body
   const to_trash = document.createElement("button")
-  to_trash.textContent = "Move to trash"
+  // Icon trash
+  const icon_trash = document.createElement("i")
+  icon_trash.classList.add("fa", "fa-trash")
+  icon_trash.setAttribute("aria-hidden", "true")
+  to_trash.append(icon_trash)
+  // Icon ends
+  to_trash.classList.add("trash_button") // delete styles for button
   const select = document.createElement("select")
   for (const [key,value] of Object.entries(colors)) {
     var opt = document.createElement('option');
@@ -149,8 +159,10 @@ function createNoteEl(note) {
   }
 
   div.append(title)
+  div.append(body)
   div.append(select)
   div.append(to_trash)
+  div.classList.add("grid-note")
   const notesList = document.querySelector("#notes_list")
   notesList.append(div)
 
@@ -164,6 +176,7 @@ function createNoteEl(note) {
     editNote(event,note);
   });
   select.value = note.color
+
   return div
 }
 function createTrashEl(trash) {
@@ -181,8 +194,10 @@ function createTrashEl(trash) {
   to_restore.textContent = "Restore element"
 
   div.append(title)
+  div.append(body)
   div.append(to_trash)
   div.append(to_restore)
+  div.classList.add("grid-note")
   const trashesList = document.querySelector("#trashes_list")
   trashesList.append(div)
 

@@ -15,7 +15,7 @@
   /* font-family: var(--font-secondary); */
 }
 body{
-  background-color: black;
+  background-color: rgb(29, 33, 40);
   color: white;
 }
 
@@ -29,6 +29,13 @@ body{
   display: grid;
   grid-template-columns: 20% 80%;
   /* margin-block-end: 30px; */
+}
+.border-left{
+  border-left: solid 3px #E5E5E5;
+}
+.border-top
+{
+  border-top: solid 3px #E5E5E5;
 }
 .align-center
 {
@@ -49,6 +56,33 @@ body{
 {
   max-width: fit-content;
 }
+/* padding */
+.p3
+{
+  padding-inline-start: 15px;
+}
+.p30
+{
+  padding-inline-start: 30px;
+  padding-block-start: 30px;
+}
+/* margin */
+.mt-8
+{
+  margin-block-start: 8px;
+}
+.ml-30
+{
+  margin-inline-start: 30px;
+}
+.text-center
+{
+  text-align: center;
+}
+.text-left
+{
+  text-align: left;
+}
 /* Utils ends */
 
 /* Form starts */
@@ -58,6 +92,7 @@ body{
   border-radius: 8px;
   background-color: white;
   padding: 20px;
+  margin-block-end: 50px;
 }
 input, textarea
 {
@@ -67,3 +102,81 @@ input, textarea
 {
   background-image: ("/assets/img/colors_palette.png");
 }
+#messageNoNotes
+{
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  font-weight: 700;
+  font-size: 3.6rem;
+  line-height: 4.8rem;
+  letter-spacing: 0.25px;
+}
+.submit
+{
+  background-color: white;
+  font-weight: 700;
+  font-size: 1.8rem;
+  line-height: 2.4rem;
+  letter-spacing: 0.25px;
+}
+.submit:hover
+{
+  color: #5d5f61;
+  cursor: pointer;
+  font-weight: 900;
+}
+/* Form ends */
+
+
+/* Grid notes starts */
+.grid-notes-list
+{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 260px));
+  gap: 20px;
+}
+
+.grid-note
+{
+  max-width: 260px;
+  height: 260px;
+  border-radius: 8px;
+  padding: 20px 0 0 20px;
+  color: black;
+}
+
+/* Grid notes ends */
+
+
+/* notes and trash buttons */
+.button-render
+{
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  height: 48px;
+  background-color: #999B9E;
+  color: white;
+  cursor: pointer;
+}
+.button-render:hover
+{
+  background-color: #b7beca;
+}
+.trash_button
+{
+  /* background: none; */
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+  border-radius: 50%;
+  padding: 6px;
+  width: 3.6rem;
+}
+/* notes and trash buttons */
