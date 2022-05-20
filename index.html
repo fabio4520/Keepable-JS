@@ -4,23 +4,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="assets/styles.css">
   <title>Keepable</title>
 </head>
 
 <body>
   <header class="grid align-center header">
-    <span class="title">Keep</span>
+    <span class="title ml-30">Keep</span>
     <span>Welcome to {keepable}</span>
   </header>
 
-  <main class="grid">
-    <div>
-      <button id="notes_toggle">Notes</button>
-      <button id="trash_toggle">Trash</button>
+  <main class="grid border-top">
+    <div class="flex-column mt-8">
+      <button id="notes_toggle" class="button-render text-left  p3">
+        <!-- <i class="fas fa-brackets-curly"></i> -->
+        <!-- <i class="fa-solid fa-brackets-curly"></i> -->
+        { }Notes
+      </button>
+      <button id="trash_toggle"class="button-render text-left p3"> 
+        <i class="fa fa-trash" aria-hidden="true"></i>
+        Trash
+      </button>
     </div>
-
-    <div id="notes">
+    
+    <div id="notes" class="border-left p30">
       <form id="form" class="flex-column">
         <label for="title" class="fit-content"></label>
         <input type="text" id="title" name="title" placeholder="The title for my new note">
@@ -41,18 +49,17 @@
             <option value="#D7AEFB">Purple</option>
             <option value="#FDCFE8">Pink</option>
           </select>
-          <input type="submit" value="Keep it!" class="fit-content">
+          <input type="submit" value="Keep it!" class="fit-content submit">
         </div>
       </form>
 
-      <div id="notes_list">
+      <div id="notes_list" class="grid-notes-list">
       </div>
 
     </div>
-
-    <div id="trashes_list">
-
+    <div id="trashes_list" class="grid-notes-list border-left p30">
     </div>
+    
 
   </main>
   <script src="index.js"></script>
