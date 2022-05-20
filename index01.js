@@ -27,6 +27,7 @@ const initialNotes = [
     id: 0,
     trash: false,
     creation_date: new Date(),
+    pin: false,
     title: "Shopping",
     body: "Nintendo",
     color: "#F28B82"
@@ -35,6 +36,7 @@ const initialNotes = [
     id: 1,
     trash: true,
     creation_date: new Date(),
+    pin: false,
     title: "Edutacion",
     body: "Codeable",
     color: "#CCFF90"
@@ -65,6 +67,26 @@ function moveNote(note){
   notes[index] = note
   console.log(note)
   localStorage.setItem("notes", JSON.stringify(notes))
+}
+
+function unpinNote(note){
+  const index = notes.indexOf(note)
+  note.pin = false
+  note.color = '#FFFFFF'
+  notes[index] = note
+  console.log(note)
+  localStorage.setItem("notes", JSON.stringify(notes))
+  toggle_notes_view()
+}
+
+function pinNote(note){
+  const index = notes.indexOf(note)
+  note.pin = true
+  note.color = '#000000'
+  notes[index] = note
+  console.log(note)
+  localStorage.setItem("notes", JSON.stringify(notes))
+  toggle_notes_view()
 }
 
 function editNote(note){
@@ -113,6 +135,7 @@ function editNoteDetail(event,note) {
     id: note.id,
     trash: note.trash,
     creation_date: note.creation_date,
+    pin: note.pin,
     title: title.value,
     body: body.value,
     color: color.value
@@ -136,6 +159,7 @@ form.addEventListener("submit", (event) => {
     id: last_id + 1,
     trash: false,
     creation_date: new Date(),
+    pin: false,
     title: title.value,
     body: body.value,
     color: color.value
@@ -165,6 +189,10 @@ function createNoteEl(note) {
   title.textContent = note.title
   const body = document.createElement("p")
   body.textContent = note.body
+  const pin = document.createElement("button")
+  pin.textContent = "Pin note"
+  const unpin = document.createElement("button")
+  unpin.textContent = "Unpin note"
   const edit = document.createElement("button")
   edit.textContent = "Edit note"
   const to_trash = document.createElement("button")
@@ -184,6 +212,8 @@ function createNoteEl(note) {
   div.append(title)
   div.append(body)
   div.append(select)
+  div.append(pin)
+  div.append(unpin)
   div.append(edit)
   div.append(to_trash)
   div.append(to_active)
@@ -191,6 +221,8 @@ function createNoteEl(note) {
 
   let notesList = document.querySelector("#active_notes_list")
   edit.style.display = 'block'
+  pin.style.display = 'block'
+  unpin.style.display = 'none'
   to_trash.style.display = 'block'
   to_active.style.display = 'none'
   erase.style.display = 'none'
@@ -198,11 +230,31 @@ function createNoteEl(note) {
   if (note.trash==true) {
     notesList = document.querySelector("#trash_notes_list")
     edit.style.display = 'none'
+    pin.style.display = 'none'
+    unpin.style.display = 'none'
     to_trash.style.display = 'none'
     to_active.style.display = 'block'
     erase.style.display = 'block'
   } 
+
+  if (note.pin == true) {
+    div.style.color = "white"
+    select.style.display = 'none'
+    pin.style.display = 'none'
+    unpin.style.display = 'block'
+    to_trash.style.display = 'none'
+    notesList = document.querySelector("#pinned_notes_list")
+  }
+
   notesList.prepend(div)
+
+  unpin.addEventListener("click", (event) => {
+    unpinNote(note);
+  });
+
+  pin.addEventListener("click", (event) => {
+    pinNote(note);
+  });
 
   edit.addEventListener("click", (event) => {
     editNote(note);
