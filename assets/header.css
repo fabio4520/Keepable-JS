@@ -1,0 +1,69 @@
+.title{
+  font-size: 20px;
+  font-weight: 700;
+  /* font-family: var(--font-secondary); */
+}
+.title::after{
+  content: "able }";
+  margin-left: 0px;
+  color: gray;
+  /* font-family: var(--font-secondary); */
+}
+.title::before{
+  content: "{";
+  color: white;
+  /* font-family: var(--font-secondary); */
+}
+body{
+  background-color: black;
+  color: white;
+}
+
+/* Utils starts*/
+.header
+{
+  height: 70px;
+}
+.grid
+{
+  display: grid;
+  grid-template-columns: 20% 80%;
+  /* margin-block-end: 30px; */
+}
+.align-center
+{
+  align-items: center;
+}
+.flex-between
+{
+  display: flex;
+  justify-content: space-between;
+}
+.flex-column
+{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.fit-content
+{
+  max-width: fit-content;
+}
+/* Utils ends */
+
+/* Form starts */
+#form
+{
+  max-width: 600px;
+  border-radius: 8px;
+  background-color: white;
+  padding: 20px;
+}
+input, textarea
+{
+  border: none;
+}
+#color
+{
+  background-image: ("/assets/img/colors_palette.png");
+}
