@@ -69,6 +69,57 @@ function moveNote(note){
 
 function editNote(note){
   // TO DO
+  const edit_div = document.createElement('div');
+  edit_div.innerHTML = 
+  `<form id="edit_form_${note.id}">
+    <label for="title">Title:</label><br>
+    <input type="text" id="title" name="title" value="${note.title}"><br>
+    <label for="body">Body:</label><br>
+    <textarea type="date" id="body" name="body">${note.body}</textarea><br>
+    <label for="color">Color:</label><br>
+    <select name="color">
+      <option value="#FFFFFF">Blank</option>
+      <option value="#F28B82">Salmon</option>
+      <option value="#FBBC04">Orange</option>
+      <option value="#FFF475">Yellow</option>
+      <option value="#CCFF90">Green</option>
+      <option value="#A7FFEB">Emerald</option>
+      <option value="#CBF0F8">Skyblue</option>
+      <option value="#AECBFA">Steel</option>
+      <option value="#D7AEFB">Purple</option>
+      <option value="#FDCFE8">Pink</option>
+    </select>
+    <input type="submit" value="Update!">
+    <button>Cancel</button>
+  </form>`
+  let note_div = document.querySelector(`#note_${note.id}`)
+  let select = edit_div.querySelectorAll("select")
+  note_div.append(edit_div)
+  const edit_form = document.querySelector(`#edit_form_${note.id}`)
+  cancel_button=edit_form.querySelector("button")
+  cancel_button.addEventListener("click", (event) => {
+    edit_div.remove()
+  })
+  edit_form.addEventListener("submit", (event) => {
+    editNoteDetail(event,note)
+    toggle_notes_view()
+  })
+}
+
+function editNoteDetail(event,note) {
+  event.preventDefault()
+  const {title, body, color} = event.target.elements
+  const updatedNote = {
+    id: note.id,
+    trash: note.trash,
+    creation_date: note.creation_date,
+    title: title.value,
+    body: body.value,
+    color: color.value
+  }
+  const index = notes.indexOf(note)
+  notes[index] = updatedNote
+  localStorage.setItem("notes", JSON.stringify(notes))
 }
 
 const form = document.querySelector("form")
@@ -108,7 +159,7 @@ function createNoteEl(note) {
 }
   
   const div = document.createElement("div")
-  div.setAttribute("id", note.id)
+  div.setAttribute("id", `note_${note.id}`)
   div.style.backgroundColor = note.color
   const title = document.createElement("h3")
   title.textContent = note.title
@@ -139,12 +190,14 @@ function createNoteEl(note) {
   div.append(erase)
 
   let notesList = document.querySelector("#active_notes_list")
+  edit.style.display = 'block'
   to_trash.style.display = 'block'
   to_active.style.display = 'none'
   erase.style.display = 'none'
 
   if (note.trash==true) {
     notesList = document.querySelector("#trash_notes_list")
+    edit.style.display = 'none'
     to_trash.style.display = 'none'
     to_active.style.display = 'block'
     erase.style.display = 'block'
@@ -177,14 +230,17 @@ function createNoteEl(note) {
   });
 
   select.addEventListener("change", (event) => {
-    editNote(event,note);
+    editColorNote(event,note);
   });
   select.value = note.color
   // return div
 }
 
-function editNote(event,note) {
+function editColorNote(event,note) {
+  const index = notes.indexOf(note)
   note.color = event.target.value
+  notes[index] = note
+  localStorage.setItem("notes", JSON.stringify(notes))
   renderNotes(notes,note.trash)
 }
 
