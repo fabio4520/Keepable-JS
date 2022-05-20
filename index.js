@@ -1,3 +1,4 @@
+
 const colors = {
   "#FFFFFF":"blank",
   "#FBBC04":"Orange",
@@ -228,3 +229,4 @@ function renderTrashes(trashes) {
 
 renderNotes(notes);
 // renderTrashes(trashes)
+
