@@ -11,6 +11,7 @@ function toggle_notes_view() {
   let trash_view = document.querySelector("#trash")
   notes_view.style.display = 'block'
   trash_view.style.display = 'none'
+  renderNotes(notes,false);
 }
 
 function toggle_trash_view() {
@@ -18,11 +19,13 @@ function toggle_trash_view() {
   let trash_view = document.querySelector("#trash")
   notes_view.style.display = 'none'
   trash_view.style.display = 'block'
+  renderNotes(notes,true);
 }
 
 const initialNotes = [
   {
     id: 0,
+    trash: false,
     creation_date: new Date(),
     title: "Shopping",
     body: "Nintendo",
@@ -30,6 +33,7 @@ const initialNotes = [
   },
   {
     id: 1,
+    trash: true,
     creation_date: new Date(),
     title: "Edutacion",
     body: "Codeable",
@@ -39,19 +43,29 @@ const initialNotes = [
 
 const noteFromStorage = JSON.parse(localStorage.getItem("notes"))
 const notes = noteFromStorage || initialNotes
-notes.sort((a,b)=>(a.creation_date<b.creation_date) ? 1:-1) // Newwest first
+
+// const noteFromStorage = JSON.parse(localStorage.getItem("notes"))
+// const notes = noteFromStorage || initialNotes
+// notes.sort((a,b)=>(a.creation_date<b.creation_date) ? 1:-1) // Newwest first
 
 function createNote(note) {
   notes.push(note)
   localStorage.setItem("notes", JSON.stringify(notes))
 }
 
-function deleteNote(note){
+function PermanentDeleteNote(note){
   const index = notes.indexOf(note)
   notes.splice(index,1)
   localStorage.setItem("notes", JSON.stringify(notes))
 }
 
+function MoveNote(note){
+  const index = notes.indexOf(note)
+  note.trash = !note.trash
+  notes[index] = note
+  console.log(note)
+  localStorage.setItem("notes", JSON.stringify(notes))
+}
 
 const form = document.querySelector("form")
 
@@ -65,6 +79,8 @@ form.addEventListener("submit", (event) => {
   }
   const newNote = {
     id: last_id + 1,
+    trash: false,
+    creation_date: new Date(),
     title: title.value,
     body: body.value,
     color: color.value
@@ -77,6 +93,7 @@ function createNoteEl(note) {
   const colors = {
     "#FFFFFF":"blank",
     "#FBBC04":"Orange",
+    "#F28B82":"Salmon",
     "#FFF475":"Yellow",
     "#CCFF90":"Green",
     "#A7FFEB":"Emerald",
@@ -93,9 +110,12 @@ function createNoteEl(note) {
   title.textContent = note.title
   const body = document.createElement("p")
   body.textContent = note.body
-  console.log(body.textContent)
   const to_trash = document.createElement("button")
   to_trash.textContent = "Move to trash"
+  const to_active = document.createElement("button")
+  to_active.textContent = "Restore"
+  const erase = document.createElement("button")
+  erase.textContent = "Permanently delete"
   const select = document.createElement("select")
   for (const [key,value] of Object.entries(colors)) {
     var opt = document.createElement('option');
@@ -108,36 +128,65 @@ function createNoteEl(note) {
   div.append(body)
   div.append(select)
   div.append(to_trash)
-  const notesList = document.querySelector("#notes_list")
+  div.append(to_active)
+  div.append(erase)
+
+  let notesList = document.querySelector("#active_notes_list")
+  to_trash.style.display = 'block'
+  to_active.style.display = 'none'
+  erase.style.display = 'none'
+
+  if (note.trash==true) {
+    notesList = document.querySelector("#trash_notes_list")
+    to_trash.style.display = 'none'
+    to_active.style.display = 'block'
+    erase.style.display = 'block'
+  } 
   notesList.prepend(div)
 
   to_trash.addEventListener("click", (event) => {
     event.preventDefault();
-    deleteNote(note);
-    renderNotes(notes);
+    MoveNote(note);
+    toggle_trash_view()
+    // renderNotes(notes,true);
+  });
+
+  to_active.addEventListener("click", (event) => {
+    event.preventDefault();
+    MoveNote(note);
+    toggle_notes_view()
+    // renderNotes(notes,note.trash);
+  });
+
+  erase.addEventListener("click", (event) => {
+    event.preventDefault();
+    PermanentDeleteNote(note);
+    renderNotes(notes,true);
   });
 
   select.addEventListener("change", (event) => {
     editNote(event,note);
   });
   select.value = note.color
-  return div
+  // return div
 }
 
 function editNote(event,note) {
   note.color = event.target.value
-  renderNotes(notes)
+  renderNotes(notes,note.trash)
 }
 
-function renderNotes(notes) {
-  const notesList = document.querySelector("#notes_list")
-
+function renderNotes(notes,trash_status) {
+  let notesList = document.querySelector("#active_notes_list")
+  if (trash_status==true) {
+    notesList = document.querySelector("#trash_notes_list")
+  } 
   notesList.innerHTML = "";
-
-  notes.forEach(note => {
-    const noteEl =  createNoteEl(note);
-    notesList.append(noteEl)
+  let filteredNotes = notes.filter(note => note.trash == trash_status)
+  filteredNotes.sort((a,b)=>(a.creation_date<b.creation_date) ? -1:1) // Newwest first
+  filteredNotes.forEach(note => {
+    createNoteEl(note)
+    // const noteEl =  createNoteEl(note,notesList);
+    // notesList.append(noteEl)
   });
 }
-
-renderNotes(notes);
