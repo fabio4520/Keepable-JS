@@ -93,6 +93,7 @@ function createNoteEl(note) {
   title.textContent = note.title
   const body = document.createElement("p")
   body.textContent = note.body
+  console.log(body.textContent)
   const to_trash = document.createElement("button")
   to_trash.textContent = "Move to trash"
   const select = document.createElement("select")
@@ -104,10 +105,11 @@ function createNoteEl(note) {
   }
 
   div.append(title)
+  div.append(body)
   div.append(select)
   div.append(to_trash)
   const notesList = document.querySelector("#notes_list")
-  notesList.append(div)
+  notesList.prepend(div)
 
   to_trash.addEventListener("click", (event) => {
     event.preventDefault();
