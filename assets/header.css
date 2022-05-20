@@ -102,7 +102,7 @@ input, textarea
 {
   background-image: ("/assets/img/colors_palette.png");
 }
-#messageNoNotes
+.messageNoNotes
 {
   margin: 0;
   position: absolute;
