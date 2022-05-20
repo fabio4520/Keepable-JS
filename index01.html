@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Keepable</title>
+</head>
+
+<body>
+  <div>
+    <button id="notes_toggle">Notes</button>
+    <button id="trash_toggle">Trash</button>
+  </div>
+  <hr>
+  <div id="notes">
+    <form id="form">
+      <label for="title">Title:</label><br>
+      <input type="text" id="title" name="title"><br>
+      <label for="body">Body:</label><br>
+      <textarea type="date" id="body" name="body">Write something...</textarea><br>
+      <label for="color">Color:</label><br>
+      <select name="color" id="color">
+        <option value="#FFFFFF">Blank</option>
+        <option value="#F28B82">Salmon</option>
+        <option value="#FBBC04">Orange</option>
+        <option value="#FFF475">Yellow</option>
+        <option value="#CCFF90">Green</option>
+        <option value="#A7FFEB">Emerald</option>
+        <option value="#CBF0F8">Skyblue</option>
+        <option value="#AECBFA">Steel</option>
+        <option value="#D7AEFB">Purple</option>
+        <option value="#FDCFE8">Pink</option>
+      </select>
+      <input type="submit" value="Keep it!">
+    </form>
+    <hr>
+    <div id="active_notes_list">
+    </div>
+  </div>
+  <div id="trash">
+    <div id="trash_notes_list">
+    </div>
+  </div>
+  <script src="index.js"></script>
+</body>
+
+</html>
