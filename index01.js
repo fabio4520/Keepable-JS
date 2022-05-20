@@ -25,7 +25,7 @@ function toggle_trash_view() {
 const initialNotes = [
   {
     id: 0,
-    trash: false,
+    trash: true,
     creation_date: new Date(),
     pin: false,
     title: "Shopping",
@@ -74,7 +74,6 @@ function unpinNote(note){
   note.pin = false
   note.color = '#FFFFFF'
   notes[index] = note
-  console.log(note)
   localStorage.setItem("notes", JSON.stringify(notes))
   toggle_notes_view()
 }
@@ -84,7 +83,6 @@ function pinNote(note){
   note.pin = true
   note.color = '#000000'
   notes[index] = note
-  console.log(note)
   localStorage.setItem("notes", JSON.stringify(notes))
   toggle_notes_view()
 }
@@ -166,6 +164,7 @@ form.addEventListener("submit", (event) => {
   }
   createNote(newNote)
   createNoteEl(newNote)
+  form.reset()
 })
 
 function createNoteEl(note) {
@@ -297,16 +296,23 @@ function editColorNote(event,note) {
 }
 
 function renderNotes(notes,trash_status) {
+  let pinnedNotesList = document.querySelector("#pinned_notes_list")
   let notesList = document.querySelector("#active_notes_list")
   if (trash_status==true) {
     notesList = document.querySelector("#trash_notes_list")
   } 
+
+  pinnedNotesList.innerHTML = "";
   notesList.innerHTML = "";
+
   let filteredNotes = notes.filter(note => note.trash == trash_status)
-  filteredNotes.sort((a,b)=>(a.creation_date<b.creation_date) ? -1:1) // Newwest first
-  filteredNotes.forEach(note => {
-    createNoteEl(note)
-    // const noteEl =  createNoteEl(note,notesList);
-    // notesList.append(noteEl)
+  if (filteredNotes.length != 0) {
+    filteredNotes.sort((a,b)=>(a.creation_date<b.creation_date) ? -1:1) // Newwest first
+    filteredNotes.forEach(note => {
+      createNoteEl(note)
   });
+  } else {
+    notesList.textContent = "Empty"
+  }
+  
 }
